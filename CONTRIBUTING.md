@@ -21,7 +21,7 @@ npm run lint
 src/
   client/                   # The consumer-facing API
     index.ts                # OxaPay class + registerRoutes
-    http.ts                 # OxaPayClient — raw fetch wrapper
+    http.ts                 # OxaPayClient (raw fetch wrapper)
     webhook.ts              # HMAC-SHA512 verifier
     helpers.ts              # Pure crypto + URL helpers
     types.ts                # OxaPay envelope + payload types
@@ -39,15 +39,15 @@ example/                    # Live demo app
 
 ## Regenerating `_generated/` files
 
-The `src/component/_generated/*.ts` files are **committed to git**. They are hand-maintained to mirror what `npx convex codegen --component-dir ./src/component` would produce. Editing them is fine — but if you've made non-trivial changes to `lib.ts` or `schema.ts`, you should refresh them by running:
+The `src/component/_generated/*.ts` files are **committed to git**. They are hand-maintained to mirror what `npx convex codegen --component-dir ./src/component` would produce. Editing them is fine, but if you've made non-trivial changes to `lib.ts` or `schema.ts`, you should refresh them by running:
 
 ```bash
 npm run build:codegen
 ```
 
-This requires a configured Convex deployment (`npx convex dev` to set up `CONVEX_DEPLOYMENT` in `.env.local`). It will overwrite the committed files in place — review the diff before committing.
+This requires a configured Convex deployment (`npx convex dev` to set up `CONVEX_DEPLOYMENT` in `.env.local`). It will overwrite the committed files in place. Review the diff before committing.
 
-**Do NOT** call `build:codegen` from `prepublishOnly` or CI — those paths must work without a Convex login. They run plain `npm run build` against the committed files.
+**Do NOT** call `build:codegen` from `prepublishOnly` or CI. Those paths must work without a Convex login. They run plain `npm run build` against the committed files.
 
 ## Tests
 
@@ -61,10 +61,10 @@ npm run test:coverage  # with coverage report
 
 When adding a new endpoint, add tests in all relevant layers:
 
-- **`src/client/http.test.ts`** — mock the HTTP request, assert headers/body/URL shape.
-- **`src/client/webhook.test.ts`** — only when changing webhook semantics.
-- **`src/component/util.test.ts`** — for any new conversion helper.
-- **`src/component/lib.test.ts`** — for any new mutation/query.
+- **`src/client/http.test.ts`**: mock the HTTP request, assert headers/body/URL shape.
+- **`src/client/webhook.test.ts`**: only when changing webhook semantics.
+- **`src/component/util.test.ts`**: for any new conversion helper.
+- **`src/component/lib.test.ts`**: for any new mutation/query.
 
 ## Code style
 

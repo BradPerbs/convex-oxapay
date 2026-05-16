@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/convex-oxapay.svg)](https://www.npmjs.com/package/convex-oxapay)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-A production-ready [Convex Component](https://www.convex.dev/components) for **OxaPay** — the crypto payment gateway that accepts Bitcoin, Ethereum, USDT, USDC, and dozens of other cryptocurrencies on multiple networks.
+A production-ready [Convex Component](https://www.convex.dev/components) for **OxaPay**, the crypto payment gateway that accepts Bitcoin, Ethereum, USDT, USDC, and dozens of other cryptocurrencies on multiple networks.
 
 `convex-oxapay` gives you:
 
@@ -52,7 +52,7 @@ npm install convex-oxapay
 
 Requires:
 
-- `convex ^1.29.0` (peer dependency — auto-installed by npm 7+; install manually with `npm install convex` if needed)
+- `convex ^1.29.0` (peer dependency, auto-installed by npm 7+; install manually with `npm install convex` if needed)
 - An OxaPay account ([sign up](https://oxapay.com)). You'll need at minimum a **Merchant API key**; the Payout key and General key are only required if you use payouts/swap/balance.
 
 ### 1. Add the component to your Convex app
@@ -80,7 +80,7 @@ npx convex env set OXAPAY_GENERAL_API_KEY   XXXXXX-XXXXXX-XXXXXX-XXXXXX
 npx convex env set OXAPAY_SANDBOX           true
 ```
 
-> ⚠️ OxaPay uses the **merchant or payout API key itself** as the HMAC secret for webhook verification — there is no separate webhook secret. Keep these keys server-side only.
+> ⚠️ OxaPay uses the **merchant or payout API key itself** as the HMAC secret for webhook verification. There is no separate webhook secret. Keep these keys server-side only.
 
 ---
 
@@ -92,7 +92,7 @@ import { OxaPay } from "convex-oxapay";
 import { components } from "./_generated/api";
 
 export const oxapay = new OxaPay(components.oxapay, {
-  // All fields are optional — defaults come from env vars.
+  // All fields are optional. Defaults come from env vars.
   merchantApiKey: process.env.OXAPAY_MERCHANT_API_KEY,
   payoutApiKey:   process.env.OXAPAY_PAYOUT_API_KEY,
   generalApiKey:  process.env.OXAPAY_GENERAL_API_KEY,
@@ -110,7 +110,7 @@ export const oxapay = new OxaPay(components.oxapay, {
 | `generalApiKey`       | `OXAPAY_GENERAL_API_KEY`   | Balance, swap                         |
 | `baseUrl`             | `OXAPAY_BASE_URL`          | Optional override                     |
 | `sandbox`             | `OXAPAY_SANDBOX`           | Default-on sandbox flag for invoices  |
-| `defaultCallbackUrl`  | —                          | Convenience: set the webhook URL once |
+| `defaultCallbackUrl`  | (none)                     | Convenience: set the webhook URL once |
 
 ---
 
@@ -144,7 +144,7 @@ export const createInvoice = action({
   },
 });
 
-/** Live status query — re-renders whenever the webhook updates the mirror. */
+/** Live status query. Re-renders whenever the webhook updates the mirror. */
 export const getPayment = query({
   args: { trackId: v.string() },
   handler: async (ctx, args) => {
@@ -260,7 +260,7 @@ For every verified delivery, BEFORE your handlers run, the component:
 
 1. **Hashes** `(track_id, status, tx_hash)` and checks the `processedWebhooks` table. Repeat deliveries become no-ops.
 2. **Upserts** the payment / payout row in the mirror table.
-3. **Forward-only status transitions** — refuses to downgrade `paid` → `waiting`, but allows `paid` → `refunding`.
+3. **Forward-only status transitions**: refuses to downgrade `paid` → `waiting`, but allows `paid` → `refunding`.
 
 OxaPay requires `HTTP 200` with body `"ok"` to consider the delivery acknowledged. The component returns exactly that. Any other response triggers OxaPay's retry schedule (5 attempts: 1 min, 3 min, 30 min, 3 h).
 
@@ -268,14 +268,14 @@ OxaPay requires `HTTP 200` with body `"ok"` to consider the delivery acknowledge
 
 ## API reference
 
-All methods on `oxapay` accept a Convex action ctx (with `runQuery` / `runMutation` / `runAction`) as their first argument. The exceptions are the namespaces that talk directly to OxaPay (`swap`, `account`, `common`) and `staticAddresses.listFromProvider` — these don't touch the Convex DB so they don't need a ctx.
+All methods on `oxapay` accept a Convex action ctx (with `runQuery` / `runMutation` / `runAction`) as their first argument. The exceptions are the namespaces that talk directly to OxaPay (`swap`, `account`, `common`) and `staticAddresses.listFromProvider`. Those don't touch the Convex DB so they don't need a ctx.
 
 ### `oxapay.payments`
 
 | Method                                        | Purpose                                                                    |
 | --------------------------------------------- | -------------------------------------------------------------------------- |
 | `createInvoice(ctx, args)`                    | Create a hosted invoice on OxaPay and mirror it. Returns the `paymentUrl`. |
-| `createWhiteLabel(ctx, args)`                 | Create a white-label payment — get raw `address`, `payAmount`, `qrCode`.   |
+| `createWhiteLabel(ctx, args)`                 | Create a white-label payment. Get raw `address`, `payAmount`, `qrCode`.    |
 | `refresh(ctx, { trackId })`                   | Re-fetch from OxaPay and update the mirror. Fallback if webhook is missed. |
 | `get(ctx, { trackId })`                       | Read the mirror row.                                                       |
 | `listForEntity(ctx, { entityId, status?, limit? })` | List payments tied to one `entityId`, optionally filtered by status. |
@@ -289,7 +289,7 @@ All methods on `oxapay` accept a Convex action ctx (with `runQuery` / `runMutati
 {
   entityId: string | null;        // your app's user/org id, or null for anonymous
   amount: number;                 // priced amount
-  currency?: string;              // default "USD" — supports fiats and cryptos
+  currency?: string;              // default "USD"; supports fiats and cryptos
   lifetime?: number;              // minutes, 15..2880, default 60
   feePaidByPayer?: 0 | 1;         // who pays the OxaPay fee
   underPaidCoverage?: number;     // %, 0..60
@@ -348,7 +348,7 @@ const { trackId, status } = await oxapay.payouts.create(ctx, {
 
 ### `oxapay.swap`
 
-Direct passthrough to OxaPay's swap engine — not mirrored locally.
+Direct passthrough to OxaPay's swap engine. Not mirrored locally.
 
 ```ts
 const { rate } = await oxapay.swap.rate({ fromCurrency: "BTC", toCurrency: "USDT" });
@@ -368,7 +368,7 @@ const { list } = await oxapay.account.acceptedCurrencies();
 
 ### `oxapay.common`
 
-Unauthenticated reference data — useful for building currency pickers.
+Unauthenticated reference data, useful for building currency pickers.
 
 ```ts
 await oxapay.common.prices();      // { BTC: 79105.23, ETH: 2228.58, ... }
@@ -392,7 +392,7 @@ oxapay.registerRoutes(http, {
 
 ### `oxapay.api({ resolve })`
 
-A destructurable bag of pre-built Convex actions — re-export them and call from your frontend directly. The `resolve` callback maps a Convex auth identity to an `entityId`.
+A destructurable bag of pre-built Convex actions. Re-export them and call from your frontend directly. The `resolve` callback maps a Convex auth identity to an `entityId`.
 
 ```ts
 // convex/oxapay.ts (continued)
@@ -462,7 +462,7 @@ function Status({ trackId }: { trackId: string }) {
 
 ## Tables created in your deployment
 
-The component creates these tables inside its isolated namespace (`components.oxapay.*`) — they don't pollute your app's schema.
+The component creates these tables inside its isolated namespace (`components.oxapay.*`). They don't pollute your app's schema.
 
 | Table               | Purpose                                                                |
 | ------------------- | ---------------------------------------------------------------------- |
@@ -471,7 +471,7 @@ The component creates these tables inside its isolated namespace (`components.ox
 | `payouts`           | Mirror of every withdrawal.                                            |
 | `processedWebhooks` | Dedup ledger so retried deliveries are no-ops. Pruned after 30 days.   |
 
-All status comparisons should be case-insensitive — OxaPay returns lowercase via REST (`paid`) and TitleCase via webhooks (`Paid`). The mirror preserves the verbatim casing.
+All status comparisons should be case-insensitive. OxaPay returns lowercase via REST (`paid`) and TitleCase via webhooks (`Paid`). The mirror preserves the verbatim casing.
 
 ---
 
@@ -486,7 +486,7 @@ new → waiting → paying → paid           ← happy path
               paid → refunding → refunded
 ```
 
-The component's mirror is **forward-only** — `paid` cannot regress to `waiting`, but `paid → refunded` is allowed.
+The component's mirror is **forward-only**: `paid` cannot regress to `waiting`, but `paid → refunded` is allowed.
 
 ### Payout lifecycle
 
@@ -563,7 +563,7 @@ The signature didn't verify. Common causes:
 
 ### My webhook is returning 500
 
-Check the Convex logs — the most likely cause is an error inside your custom event handler. The component catches verification errors but not handler errors (so OxaPay retries on transient failures).
+Check the Convex logs. The most likely cause is an error inside your custom event handler. The component catches verification errors but not handler errors (so OxaPay retries on transient failures).
 
 ### I'm getting "OxaPay API error (401)"
 
@@ -571,7 +571,7 @@ The key is wrong, blank, or you're calling the wrong endpoint family. Re-check `
 
 ### A payment was paid but my user wasn't upgraded
 
-Check the `processedWebhooks` table — the eventKey is `(type, trackId, status, tx_hash)`. If you see the entry, the webhook reached your deployment; the issue is in your handler. If you don't see it, the webhook never arrived — check the OxaPay dashboard's webhook log.
+Check the `processedWebhooks` table. The eventKey is `(type, trackId, status, tx_hash)`. If you see the entry, the webhook reached your deployment; the issue is in your handler. If you don't see it, the webhook never arrived. Check the OxaPay dashboard's webhook log.
 
 ### Static addresses stopped working after a few months
 
@@ -585,4 +585,4 @@ Funds sent to an OxaPay invoice address after the lifetime elapses are **unrecov
 
 ## License
 
-Apache-2.0 — see [LICENSE](./LICENSE).
+Apache-2.0. See [LICENSE](./LICENSE).

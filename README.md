@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/convex-oxapay.svg)](https://www.npmjs.com/package/convex-oxapay)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-A production-ready [Convex Component](https://www.convex.dev/components) for **OxaPay**, the crypto payment gateway that accepts Bitcoin, Ethereum, USDT, USDC, and dozens of other cryptocurrencies on multiple networks.
+A [Convex Component](https://www.convex.dev/components) for **OxaPay**, the crypto payment gateway that accepts Bitcoin, Ethereum, USDT, USDC, and dozens of other cryptocurrencies on multiple networks.
 
 `convex-oxapay` gives you:
 

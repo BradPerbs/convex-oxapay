@@ -2,8 +2,11 @@
 
 [![npm version](https://img.shields.io/npm/v/convex-oxapay.svg)](https://www.npmjs.com/package/convex-oxapay)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Live demo](https://img.shields.io/badge/live-demo-6366f1.svg)](https://convex-oxapay.bradperbs-11a.workers.dev/)
 
 A [Convex Component](https://www.convex.dev/components) for **OxaPay**, the crypto payment gateway that accepts Bitcoin, Ethereum, USDT, USDC, and dozens of other cryptocurrencies on multiple networks.
+
+> 🎮 **Try it live →** [convex-oxapay.bradperbs-11a.workers.dev](https://convex-oxapay.bradperbs-11a.workers.dev/)
 
 `convex-oxapay` gives you:
 
@@ -532,6 +535,8 @@ export function initConvexTest() {
 ---
 
 ## Local development
+
+A hosted version of the example app is at [convex-oxapay.bradperbs-11a.workers.dev](https://convex-oxapay.bradperbs-11a.workers.dev/). To run it locally:
 
 ```bash
 git clone https://github.com/bradperbs/convex-oxapay

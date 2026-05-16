@@ -22,18 +22,7 @@ The component mirrors every OxaPay payment and payout into your Convex deploymen
 
 ## Demo
 
-A live, fully wired example app is hosted at **[convex-oxapay.bradperbs-11a.workers.dev](https://convex-oxapay.bradperbs-11a.workers.dev/)**.
-
-It runs every part of the component end to end:
-
-- **Hosted invoice** flow with redirect to `pay.oxapay.com`
-- **White-label** payment with raw address + QR code in-app
-- **Wallet** (static deposit address) generation
-- **Payout** form (disabled in the demo since OxaPay has no payout sandbox)
-- **Market** data: live prices and account balance
-- **History** of every payment with status filtering
-
-The source lives in [`example/`](./example) and can be run locally with the commands in [Local development](#local-development) below.
+**[See the live demo →](https://convex-oxapay.bradperbs-11a.workers.dev/)**
 
 ---
 

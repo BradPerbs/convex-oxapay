@@ -1,0 +1,116 @@
+{
+  "name": "convex-oxapay",
+  "description": "An OxaPay (crypto payments) component for Convex.",
+  "repository": "github:bradperbs/convex-oxapay",
+  "homepage": "https://github.com/bradperbs/convex-oxapay#readme",
+  "bugs": {
+    "url": "https://github.com/bradperbs/convex-oxapay/issues"
+  },
+  "version": "0.1.1",
+  "license": "Apache-2.0",
+  "keywords": [
+    "convex",
+    "component",
+    "oxapay",
+    "crypto",
+    "bitcoin",
+    "ethereum",
+    "usdt",
+    "payments",
+    "checkout",
+    "subscription",
+    "webhook"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail -n convex,vite,build -c blue,green,magenta \"npm:dev:backend\" \"npm:dev:frontend\" \"npm:dev:build\"",
+    "dev:demo": "concurrently --kill-others-on-fail -n convex,vite -c blue,green \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "dev:frontend": "cd example && vite --clearScreen false",
+    "dev:backend": "convex dev",
+    "dev:build": "chokidar \"tsconfig*.json\" \"src/**/*.ts\" \"src/**/*.tsx\" -i \"**/*.test.ts\" -c \"npm run build\" --initial",
+    "predev": "convex dev --skip-push",
+    "build": "tsc --project ./tsconfig.build.json",
+    "build:codegen": "npx convex codegen --component-dir ./src/component && npm run build",
+    "build:clean": "npm run clean && npm run build",
+    "clean": "rimraf dist && rimraf -g \"*.tsbuildinfo\"",
+    "typecheck": "tsc --noEmit",
+    "check": "tsc --noEmit && tsc -p example/convex",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "test": "vitest run --typecheck",
+    "test:watch": "vitest --typecheck --clearScreen false",
+    "test:debug": "vitest --inspect-brk --no-file-parallelism",
+    "test:coverage": "vitest run --coverage --coverage.reporter=text",
+    "preversion": "npm ci && npm run build:clean && npm run test && npm run lint && npm run typecheck",
+    "prepublishOnly": "npm run build:clean",
+    "alpha": "npm version prerelease --preid alpha && npm publish --tag alpha && git push --follow-tags",
+    "release": "npm version patch && npm publish && git push --follow-tags"
+  },
+  "files": [
+    "dist",
+    "src",
+    "!src/**/*.test.ts",
+    "!**/*.tsbuildinfo"
+  ],
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "types": "./dist/client/index.d.ts",
+      "default": "./dist/client/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "default": "./dist/react/index.js"
+    },
+    "./test": "./src/test.ts",
+    "./_generated/component.js": {
+      "types": "./dist/component/_generated/component.d.ts"
+    },
+    "./convex.config": {
+      "types": "./dist/component/convex.config.d.ts",
+      "default": "./dist/component/convex.config.js"
+    },
+    "./convex.config.js": {
+      "types": "./dist/component/convex.config.d.ts",
+      "default": "./dist/component/convex.config.js"
+    }
+  },
+  "peerDependencies": {
+    "convex": "^1.29.0",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@edge-runtime/vm": "^5.0.0",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@vitest/coverage-v8": "^2.0.0",
+    "chokidar-cli": "^3.0.0",
+    "concurrently": "^9.2.1",
+    "convex": "^1.29.0",
+    "convex-test": "^0.0.36",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0",
+    "prettier": "^3.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "rimraf": "^6.0.0",
+    "typescript": "^5.5.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^2.0.0"
+  },
+  "types": "./dist/client/index.d.ts",
+  "module": "./dist/client/index.js"
+}

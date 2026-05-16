@@ -9,7 +9,6 @@ coverage/
 .idea/
 .vscode/
 *.log
-example/convex/_generated/
 example/dist/
 example/.env.local
 .npmrc
